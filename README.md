@@ -16,7 +16,7 @@ O sistema fará um scan da credencial do participante para permitir a entrada no
 - [X] O organizador deve poder visualizar dados de um evento;
 - [ ] O organizador deve poder visualizar a lista de participantes; 
 - [X] O participante deve poder se inscrever em um evento;
-- [ ] O participante deve poder visualizar seu crachá de inscrição;
+- [X] O participante deve poder visualizar seu crachá de inscrição;
 - [ ] O participante deve poder realizar check-in no evento;
 
 ### Regras de negócio
