@@ -17,13 +17,13 @@ O sistema fará um scan da credencial do participante para permitir a entrada no
 - [ ] O organizador deve poder visualizar a lista de participantes; 
 - [X] O participante deve poder se inscrever em um evento;
 - [X] O participante deve poder visualizar seu crachá de inscrição;
-- [ ] O participante deve poder realizar check-in no evento;
+- [X] O participante deve poder realizar check-in no evento;
 
 ### Regras de negócio
 
 - [X] O participante só pode se inscrever em um evento uma única vez;
 - [X] O participante só pode se inscrever em eventos com vagas disponíveis;
-- [ ] O participante só pode realizar check-in em um evento uma única vez;
+- [X] O participante só pode realizar check-in em um evento uma única vez;
 
 ### Requisitos não-funcionais
 
