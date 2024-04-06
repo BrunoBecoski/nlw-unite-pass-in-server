@@ -1,4 +1,4 @@
-# createEvent
+# Create an event
 POST http://localhost:3333/events
 Content-Type: application/json
 
@@ -9,7 +9,8 @@ Content-Type: application/json
 }
 
 ### 
-# registerForEvent
+
+# Register an attendee
 POST http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1/attendees
 Content-Type: application/json
 
@@ -19,17 +20,21 @@ Content-Type: application/json
 }
 
 ### 
-# getEvent
+
+# Get an event
 GET http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1
 
 ### 
-#getAttendeeBadge
+
+# Get an attendee badge
 GET http://localhost:3333/attendees/5/badge
 
 ###
-#checkIn
+
+# Check-in an attendee
 GET http://localhost:3333/attendees/5/check-in
 
-### 
-# getEventAttendees
+###
+
+# Get event attendee
 GET http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1/attendees?query=bruno

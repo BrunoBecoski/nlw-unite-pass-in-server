@@ -8,8 +8,10 @@ import { prisma } from '../lib/prisma'
 export async function createEvent(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>() 
-    .post('/events', { 
+    .post('/events', {
       schema: {
+        summary: 'Create an event',
+        tags: ['events'],
         body: z.object({
           title: z.string().min(4),
           details: z.string().nullable(),
