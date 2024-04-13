@@ -19,6 +19,17 @@ async function seed() {
     }
   })
 
+  const eventsToInsert: Prisma.EventCreateManyInput[] = []
+
+  for (let i = 0; i <= 20; i++) {
+    eventsToInsert.push({
+      title: faker.lorem.sentence({ min: 1, max: 3 }),
+      slug: faker.lorem.slug(),
+      maximumAttendees: faker.number.int({ min: 1, max: 1000 }),
+      details: faker.lorem.sentence(),
+    })
+  }
+
   const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
 
   for (let i = 0; i <= 120; i++) {
@@ -39,11 +50,17 @@ async function seed() {
     })
   }
 
-  await Promise.all(attendeesToInsert.map(data => {
-    return prisma.attendee.create({
-      data,
+  await Promise.all(
+    attendeesToInsert.map(data => {
+      return prisma.attendee.create({ data })
     })
-  }))
+  )
+
+  await Promise.all(
+    eventsToInsert.map(data => {
+      return prisma.event.create({ data })
+    })
+  )
 }
 
 seed().then(() => {
