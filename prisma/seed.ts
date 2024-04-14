@@ -20,6 +20,7 @@ async function seed() {
       endDate: new Date("04-07-2024"),
       virtualEvent: true,
       physicalEvent: false,
+      checkInAfterStart: true,
     }
   })
 
@@ -35,6 +36,7 @@ async function seed() {
       endDate: faker.date.recent({ days: 7 }),
       virtualEvent: faker.datatype.boolean(),
       physicalEvent: faker.datatype.boolean(),
+      checkInAfterStart: faker.datatype.boolean(),
     })
   }
 

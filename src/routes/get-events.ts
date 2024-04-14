@@ -28,7 +28,9 @@ export async function getEvents(app: FastifyInstance) {
                 startDate: z.date(),
                 endDate: z.date(),
                 virtualEvent: z.boolean(),
-                physicalEvent: z.boolean(),               }),
+                physicalEvent: z.boolean(),
+                checkInAfterStart: z.boolean(),
+              }),
             ),
             total: z.number(),
           }),          
@@ -49,12 +51,45 @@ export async function getEvents(app: FastifyInstance) {
             endDate: true,
             virtualEvent: true,
             physicalEvent: true,
+            checkInAfterStart: true,
             _count: {
               select: {
                 attendees: true,
               }
             }
           },
+          where: query ? {
+            OR: [
+              {
+                title: {
+                  contains: query,
+                }
+              },
+              { 
+                details: {
+                  contains: query,
+                },
+              }
+            ]            
+          } : {},
+          take: 10,
+          skip: pageIndex * 10,
+        }),
+        prisma.event.count({
+          where: query ? {
+            OR: [
+              {
+                title: {
+                  contains: query,
+                }
+              },
+              { 
+                details: {
+                  contains: query,
+                },
+              }
+            ]    
+          } : {},
         }),
         prisma.event.count()
       ])
@@ -72,6 +107,7 @@ export async function getEvents(app: FastifyInstance) {
             endDate: event.endDate,
             virtualEvent: event.virtualEvent,
             physicalEvent: event.physicalEvent,
+            checkInAfterStart: event.checkInAfterStart,
           }
         }) ,
         total,
