@@ -16,6 +16,10 @@ async function seed() {
       slug: 'unite-summit',
       details: 'Um evento p/ devs apaixonados(as) por código!',
       maximumAttendees: 120,
+      startDate: new Date("04-01-2024"),
+      endDate: new Date("04-07-2024"),
+      virtualEvent: true,
+      physicalEvent: false,
     }
   })
 
@@ -27,12 +31,16 @@ async function seed() {
       slug: faker.lorem.slug(),
       maximumAttendees: faker.number.int({ min: 1, max: 1000 }),
       details: faker.lorem.sentence(),
+      startDate: faker.date.recent({ days: 30 }),
+      endDate: faker.date.recent({ days: 7 }),
+      virtualEvent: faker.datatype.boolean(),
+      physicalEvent: faker.datatype.boolean(),
     })
   }
 
   const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
 
-  for (let i = 0; i <= 120; i++) {
+  for (let i = 1; i <= 120; i++) {
     attendeesToInsert.push({
       id: 10000 + i,
       name: faker.person.fullName(),

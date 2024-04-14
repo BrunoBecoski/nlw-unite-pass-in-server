@@ -23,8 +23,12 @@ export async function getEvents(app: FastifyInstance) {
                 slug: z.string(),
                 title: z.string(),
                 details: z.string().nullable(),
+                attendees: z.number(),
                 maximumAttendees: z.number().nullable(),
-              }),
+                startDate: z.date(),
+                endDate: z.date(),
+                virtualEvent: z.boolean(),
+                physicalEvent: z.boolean(),               }),
             ),
             total: z.number(),
           }),          
@@ -41,6 +45,15 @@ export async function getEvents(app: FastifyInstance) {
             slug: true,
             details: true,
             maximumAttendees: true,
+            startDate: true,
+            endDate: true,
+            virtualEvent: true,
+            physicalEvent: true,
+            _count: {
+              select: {
+                attendees: true,
+              }
+            }
           },
         }),
         prisma.event.count()
@@ -53,7 +66,12 @@ export async function getEvents(app: FastifyInstance) {
             title: event.title,
             slug: event.slug,
             details: event.details,
+            attendees: event._count.attendees,
             maximumAttendees: event.maximumAttendees,
+            startDate: event.startDate,
+            endDate: event.endDate,
+            virtualEvent: event.virtualEvent,
+            physicalEvent: event.physicalEvent,
           }
         }) ,
         total,
