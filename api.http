@@ -37,9 +37,9 @@ GET http://localhost:3333/attendees/5/check-in
 ###
 
 # Get event attendee
-GET http://localhost:3333/events/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0/attendees?pageIndex=5
+GET http://localhost:3333/events/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0/attendees?pageIndex=2
 
 ###
 
 # Get events
-GET http://localhost:3333/events?query=studio
+GET http://localhost:3333/events

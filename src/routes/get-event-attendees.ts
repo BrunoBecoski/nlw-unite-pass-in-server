@@ -15,7 +15,7 @@ export async function getEventAttendees(app: FastifyInstance) {
           eventId: z.string().uuid(),
         }),
         querystring: z.object({
-          pageIndex: z.string().nullish().default('0').transform(Number),
+          pageIndex: z.string().nullish().default('1').transform(Number),
           query: z.string().nullish(),
         }),
         response: {
@@ -59,7 +59,7 @@ export async function getEventAttendees(app: FastifyInstance) {
             eventId,
           },
           take: 10,
-          skip: pageIndex * 10,
+          skip: (pageIndex - 1) * 10,
           orderBy: {
             createdAt: 'desc'
           }

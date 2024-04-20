@@ -12,7 +12,7 @@ export async function getEvents(app: FastifyInstance) {
         summary: 'Get events',
         tags: ['events'],
         querystring: z.object({
-          pageIndex: z.string().nullish().default('0').transform(Number),
+          pageIndex: z.string().nullish().default('1').transform(Number),
           query: z.string().nullish(),
         }),
         response: {
@@ -73,7 +73,7 @@ export async function getEvents(app: FastifyInstance) {
             ]            
           } : {},
           take: 10,
-          skip: pageIndex * 10,
+          skip: (pageIndex - 1) * 10,
         }),
         prisma.event.count({
           where: query ? {
