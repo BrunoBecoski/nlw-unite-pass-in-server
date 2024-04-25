@@ -3,16 +3,17 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { prisma } from '../lib/prisma'
+import { BadRequest } from './_errors/bad-request'
 
 export async function getEventAttendees(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/events/:eventId/attendees', {
+    .get('/events/:slug/attendees', {
       schema: {
         summary: 'Get event attendee',
         tags: ['events'],
         params: z.object({
-          eventId: z.string().uuid(),
+          slug: z.string(),
         }),
         querystring: z.object({
           pageIndex: z.string().nullish().default('1').transform(Number),
@@ -29,13 +30,29 @@ export async function getEventAttendees(app: FastifyInstance) {
                 checkedInAt: z.date().nullable(),
               }),
             ),
+            eventTitle: z.string(),
             total: z.number(),
+
           }),
         },
       },
     }, async (request, reply) => {
-      const { eventId } = request.params
+      const { slug } = request.params
       const { pageIndex, query } = request.query
+      
+      const event = await prisma.event.findUnique({
+        select: {
+          id: true,
+          title: true,
+        },
+        where: {
+          slug,
+        }
+      })
+
+      if (event === null) {
+        throw new BadRequest('Event not found.')
+      }
 
       const [attendees, total] = await Promise.all([
         prisma.attendee.findMany({
@@ -47,16 +64,15 @@ export async function getEventAttendees(app: FastifyInstance) {
             checkIn: {
               select: {
                 createdAt: true,
-              }
-            }
+              },
+            },
           },
           where: query ? {
-            eventId,
+            eventId: event.id,
             name: {
               contains: query,
             }
           } : {
-            eventId,
           },
           take: 10,
           skip: (pageIndex - 1) * 10,
@@ -66,12 +82,12 @@ export async function getEventAttendees(app: FastifyInstance) {
         }),
         prisma.attendee.count({
           where: query ? {
-            eventId,
+            eventId: event.id,
             name: {
               contains: query,
             }
           } : {
-            eventId,
+            eventId: event.id,
           }
         })
       ])      
@@ -86,6 +102,7 @@ export async function getEventAttendees(app: FastifyInstance) {
             checkedInAt: attendee.checkIn?.createdAt ?? null,
           }
         }),
+        eventTitle: event.title,
         total,
       })
     })
