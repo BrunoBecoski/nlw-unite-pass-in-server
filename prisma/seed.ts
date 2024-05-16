@@ -41,34 +41,40 @@ async function seed() {
   }
 
   const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
-
+  
   for (let i = 1; i <= 125; i++) {
     attendeesToInsert.push({
-      id: faker.number.int({ min: 10000, max: 99999 }),
       name: faker.person.fullName(),
       email: faker.internet.email().toLocaleLowerCase(),
-      eventId,
       createdAt: faker.date.recent({ days: 30, refDate: dayjs().subtract(8, "days").toDate() }),
-      checkIn: faker.helpers.arrayElement<Prisma.CheckInUncheckedCreateNestedOneWithoutAttendeeInput | undefined>([
-        undefined,
-        {
-          create: {
-            createdAt: faker.date.recent({ days: 7 }),
-          }
-        }
-      ])
     })
   }
+  
+  const eventsAttendeesToInsert: Prisma.EventAttendeeUncheckedCreateInput[] = []
 
+  for (let i = 1; i <= 25; i++) {
+    eventsAttendeesToInsert.push({
+      eventId: faker.string.uuid(),
+      attendeeId: faker.string.uuid(),
+      checkIn: faker.datatype.boolean(),
+    })
+  }
+    
   await Promise.all(
     attendeesToInsert.map(data => {
       return prisma.attendee.create({ data })
     })
   )
-
+  
   await Promise.all(
     eventsToInsert.map(data => {
       return prisma.event.create({ data })
+    })
+  )
+  
+  await Promise.all(
+    eventsAttendeesToInsert.map(data => {
+      return prisma.eventAttendee.create({ data })
     })
   )
 }
