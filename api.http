@@ -43,3 +43,8 @@ GET http://localhost:3333/events/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0/attendees?
 
 # Get events
 GET http://localhost:3333/events
+
+###
+
+# Get attendees
+GET http://localhost:3333/attendees
