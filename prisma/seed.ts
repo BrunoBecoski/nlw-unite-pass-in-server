@@ -5,9 +5,11 @@ import dayjs from 'dayjs'
 import { prisma } from '../src/lib/prisma'
 
 async function seed() {
-  const eventId = 'cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0'
-
   await prisma.event.deleteMany()
+  await prisma.attendee.deleteMany()
+  await prisma.eventAttendee.deleteMany()
+
+  const eventId = 'cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0'
 
   await prisma.event.create({
     data: {
@@ -21,6 +23,24 @@ async function seed() {
       virtualEvent: true,
       physicalEvent: false,
       checkInAfterStart: true,
+    }
+  })
+
+  const attendeeId = 'b8d15ef3-d90f-4c7a-b393-4bec8fbf2681'
+
+  await prisma.attendee.create({
+    data: {
+      id: attendeeId,
+      name: 'Bruno Becoski',
+      email: 'bruno@email.com',
+    }
+  })
+
+  await prisma.eventAttendee.create({
+    data: {
+      eventId,
+      attendeeId,
+      checkIn: true,
     }
   })
 
@@ -49,17 +69,7 @@ async function seed() {
       createdAt: faker.date.recent({ days: 30, refDate: dayjs().subtract(8, "days").toDate() }),
     })
   }
-  
-  const eventsAttendeesToInsert: Prisma.EventAttendeeUncheckedCreateInput[] = []
-
-  for (let i = 1; i <= 25; i++) {
-    eventsAttendeesToInsert.push({
-      eventId: faker.string.uuid(),
-      attendeeId: faker.string.uuid(),
-      checkIn: faker.datatype.boolean(),
-    })
-  }
-    
+      
   await Promise.all(
     attendeesToInsert.map(data => {
       return prisma.attendee.create({ data })
@@ -69,12 +79,6 @@ async function seed() {
   await Promise.all(
     eventsToInsert.map(data => {
       return prisma.event.create({ data })
-    })
-  )
-  
-  await Promise.all(
-    eventsAttendeesToInsert.map(data => {
-      return prisma.eventAttendee.create({ data })
     })
   )
 }

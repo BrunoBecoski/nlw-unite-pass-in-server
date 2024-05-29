@@ -91,7 +91,6 @@ export async function getEvents(app: FastifyInstance) {
             ]    
           } : {},
         }),
-        prisma.event.count()
       ])
 
       return reply.status(200).send({

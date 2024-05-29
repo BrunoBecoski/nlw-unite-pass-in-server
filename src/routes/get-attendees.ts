@@ -50,7 +50,13 @@ export async function getAttendees(app: FastifyInstance) {
               createdAt: 'desc'
             },        
         }),
-        prisma.attendee.count()
+        prisma.attendee.count({
+          where: query ? {
+            name: {
+              contains: query,
+            },
+          } : {},
+        }),
       ])
 
       return reply.status(200).send({
