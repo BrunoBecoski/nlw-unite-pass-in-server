@@ -12,7 +12,10 @@ import { checkIn } from './routes/check-in'
 import { getEventAttendees } from './routes/get-event-attendees'
 import { errorHandler } from './error-handler'
 import { getEvents } from './routes/get-events'
+
 import { getAttendees } from './routes/get-attendees'
+import { createAttendee } from './routes/attendee/create-attendee'
+
 
 export const app = fastify()
 
@@ -40,14 +43,18 @@ app.register(fastifySwaggerUI, {
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
-app.register(createEvent)
-app.register(registerForEvent)
-app.register(getEvent)
-app.register(getAttendeeBadge)
 app.register(checkIn)
-app.register(getEventAttendees)
+app.register(registerForEvent)
+app.register(getAttendeeBadge)
+
+app.register(getEvent)
 app.register(getEvents)
+app.register(createEvent)
+
 app.register(getAttendees)
+app.register(createAttendee)
+
+app.register(getEventAttendees)
 
 app.setErrorHandler(errorHandler)
 

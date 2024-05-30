@@ -10,8 +10,8 @@ Content-Type: application/json
 
 ### 
 
-# Register an attendee
-POST http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1/attendees
+# Create an attendee
+POST http://localhost:3333/create/attendee
 Content-Type: application/json
 
 {
