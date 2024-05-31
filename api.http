@@ -1,3 +1,9 @@
+###
+
+# EVENTS
+
+###
+
 # Create an event
 POST http://localhost:3333/events
 Content-Type: application/json
@@ -7,6 +13,20 @@ Content-Type: application/json
   "details": "Um Novo evento 2 para quem é apaixonado por programação",
   "maximumAttendees": 1
 }
+
+###
+
+# Get an event
+GET http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1
+
+###
+
+# Get events
+GET http://localhost:3333/events
+
+###
+
+# ATTENDEE
 
 ### 
 
@@ -19,12 +39,17 @@ Content-Type: application/json
   "email": "bruno@rocketseat.com"
 }
 
-### 
+###
 
-# Get an event
-GET http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1
+# Get an attendee
+GET http://localhost:3333/get/attendee/00001
 
-### 
+###
+
+# Get attendees
+GET http://localhost:3333/attendees
+
+###
 
 # Get an attendee badge
 GET http://localhost:3333/attendees/5/badge
@@ -39,12 +64,4 @@ GET http://localhost:3333/attendees/5/check-in
 # Get event attendee
 GET http://localhost:3333/events/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0/attendees?pageIndex=2
 
-###
 
-# Get events
-GET http://localhost:3333/events
-
-###
-
-# Get attendees
-GET http://localhost:3333/attendees

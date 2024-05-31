@@ -33,6 +33,7 @@ async function seed() {
       id: attendeeId,
       name: 'Bruno Becoski',
       email: 'bruno@email.com',
+      code: '00001',
     }
   })
 
@@ -67,6 +68,7 @@ async function seed() {
       name: faker.person.fullName(),
       email: faker.internet.email().toLocaleLowerCase(),
       createdAt: faker.date.recent({ days: 30, refDate: dayjs().subtract(8, "days").toDate() }),
+      code: faker.number.int({ min: 10000, max: 99999 }).toString()
     })
   }
       

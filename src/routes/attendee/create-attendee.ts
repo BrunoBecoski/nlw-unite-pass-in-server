@@ -12,7 +12,7 @@ export async function createAttendee(app: FastifyInstance) {
     .post('/create/attendee', {
       schema: {
         summary: 'Post an attendee',
-        tags: ['attendees'],
+        tags: ['create', 'attendees'],
         body: z.object({
           name: z.string(),
           email: z.string().email(),

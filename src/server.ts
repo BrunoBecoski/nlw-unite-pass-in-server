@@ -13,8 +13,9 @@ import { getEventAttendees } from './routes/get-event-attendees'
 import { errorHandler } from './error-handler'
 import { getEvents } from './routes/get-events'
 
-import { getAttendees } from './routes/get-attendees'
 import { createAttendee } from './routes/attendee/create-attendee'
+import { getAttendee } from './routes/attendee/get-attendee'
+import { getAttendees } from './routes/attendee/get-attendees'
 
 
 export const app = fastify()
@@ -51,8 +52,9 @@ app.register(getEvent)
 app.register(getEvents)
 app.register(createEvent)
 
-app.register(getAttendees)
 app.register(createAttendee)
+app.register(getAttendee)
+app.register(getAttendees)
 
 app.register(getEventAttendees)
 

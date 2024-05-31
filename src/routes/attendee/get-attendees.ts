@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { prisma } from '../lib/prisma'
+import { prisma } from '../../lib/prisma'
 
 export async function getAttendees(app: FastifyInstance) {
   app
@@ -22,6 +22,7 @@ export async function getAttendees(app: FastifyInstance) {
                 id: z.string().uuid(),
                 name: z.string(),
                 email: z.string().email(),
+                events: z.number(),
               }),
             ),
             total: z.number(),       
@@ -37,6 +38,11 @@ export async function getAttendees(app: FastifyInstance) {
             id: true,
             name: true,
             email: true,
+            _count: {
+              select: {
+                events: true,
+              }
+            }
           },
           where: query ? {
             name: {
@@ -65,6 +71,7 @@ export async function getAttendees(app: FastifyInstance) {
             id: attendee.id,
             name: attendee.name,
             email: attendee.email,
+            events: attendee._count.events,
           }
         }),
         total,
