@@ -42,7 +42,12 @@ Content-Type: application/json
 ###
 
 # Get an attendee
-GET http://localhost:3333/get/attendee/00001
+GET http://localhost:3333/get/attendee/81050
+
+###
+
+# Delete an attendee
+DELETE http://localhost:3333/delete/attendee/81050
 
 ###
 

@@ -12,7 +12,7 @@ export async function createAttendee(app: FastifyInstance) {
     .post('/create/attendee', {
       schema: {
         summary: 'Post an attendee',
-        tags: ['create', 'attendees'],
+        tags: ['create', 'attendee'],
         body: z.object({
           name: z.string(),
           email: z.string().email(),
@@ -34,7 +34,7 @@ export async function createAttendee(app: FastifyInstance) {
       })
 
       if (attendeeWithSameEmail != null) {
-        throw new BadRequest('Another attendee with same title already exists.')
+        throw new BadRequest('Another attendee with same email already exists.')
       }
 
       const code = await generateCode()
