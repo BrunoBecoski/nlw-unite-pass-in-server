@@ -35,24 +35,34 @@ POST http://localhost:3333/create/attendee
 Content-Type: application/json
 
 {
-  "name": "Bruno Becoski",
+  "name": "Bru",
   "email": "bruno@rocketseat.com"
 }
 
 ###
 
 # Get an attendee
-GET http://localhost:3333/get/attendee/81050
+GET http://localhost:3333/get/attendee/92c14a5b-5387-48b1-866c-3c0de77c9072
+###
+
+# Update an attendee
+PUT http://localhost:3333/update/attendee
+Content-Type: application/json
+
+{
+  "id": "92c14a5b-5387-48b1-866c-3c0de77c9072",
+  "name": "Bruno Becoski",
+  "email": "bruno@email.com"
+}
 
 ###
 
 # Delete an attendee
-DELETE http://localhost:3333/delete/attendee/81050
-
+DELETE http://localhost:3333/delete/attendee/b2269485-de4d-4b69-aa94-ec5acf6ee903
 ###
 
 # Get attendees
-GET http://localhost:3333/attendees
+GET http://localhost:3333/get/attendees
 
 ###
 

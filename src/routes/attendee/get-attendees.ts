@@ -7,7 +7,7 @@ import { prisma } from '../../lib/prisma'
 export async function getAttendees(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/attendees',{
+    .get('/get/attendees',{
       schema: {
         summary: 'Get Attendees',
         tags: ['attendees'],
@@ -20,6 +20,7 @@ export async function getAttendees(app: FastifyInstance) {
             attendees: z.array(
               z.object({
                 id: z.string().uuid(),
+                code: z.string(),
                 name: z.string(),
                 email: z.string().email(),
                 events: z.number(),
@@ -36,6 +37,7 @@ export async function getAttendees(app: FastifyInstance) {
         prisma.attendee.findMany({
           select: {
             id: true,
+            code: true,
             name: true,
             email: true,
             _count: {
@@ -69,6 +71,7 @@ export async function getAttendees(app: FastifyInstance) {
         attendees: attendees.map(attendee => {
           return {
             id: attendee.id,
+            code: attendee.code,
             name: attendee.name,
             email: attendee.email,
             events: attendee._count.events,

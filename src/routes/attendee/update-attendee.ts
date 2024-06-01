@@ -2,32 +2,44 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { generateCode } from '../../utils/generate-code'
 import { prisma } from '../../lib/prisma'
 import { BadRequest } from '../_errors/bad-request'
 
-export async function createAttendee(app: FastifyInstance) {
+export async function updateAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .post('/create/attendee', {
+    .put('/update/attendee', {
       schema: {
-        summary: 'Post an attendee',
-        tags: ['create', 'attendee'],
+        summary: 'Update an Attendee',
+        tags: ['update', 'attendee'],
         body: z.object({
+          id: z.string().uuid(),
           name: z.string().min(3),
           email: z.string().email(),
         }),
         response: {
-          201: z.object({
-            attendee: z.object({
+          200: z.object({  
+            updatedAttendee: z.object({
               id: z.string().uuid(),
               code: z.string(),
-            }),
+              name: z.string(),
+              email: z.string().email(),
+            })
           }),
         },
       },
     }, async (request, reply) => {
-      const { name, email } = request.body
+      const { id, email, name } = request.body
+
+      const attendee = await prisma.attendee.findUnique({
+        where: {
+          id,
+        }
+      })
+
+      if (attendee == null) {
+        throw new BadRequest('Attendee not found.')
+      }
 
       const attendeeWithSameEmail = await prisma.attendee.findUnique({
         where: {
@@ -39,26 +51,17 @@ export async function createAttendee(app: FastifyInstance) {
         throw new BadRequest('Another attendee with same email already exists.')
       }
 
-      const code = await generateCode()
+      const updatedAttendee = await prisma.attendee.update({
+        where: {
+          id,
+        },
 
-      const attendee = await prisma.attendee.create({
         data: {
-          code,
           name,
           email,
         },
-
-        select: {
-          id: true,
-          code: true,
-        }
       })
 
-      return reply.status(201).send({
-        attendee: {
-          id: attendee.id,
-          code: attendee.code,
-        }
-      })
+      return reply.status(200).send({ updatedAttendee })
     })
 }

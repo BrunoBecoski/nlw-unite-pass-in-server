@@ -8,12 +8,12 @@ import { BadRequest } from '../_errors/bad-request'
 export async function getAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/get/attendee/:code', {
+    .get('/get/attendee/:id', {
       schema: {
         summary: 'Get attendee',
         tags: ['get', 'attendee'],
         params: z.object({
-          code: z.string(),
+          id: z.string().uuid(),
         }),
         response: {
           200: z.object({
@@ -34,11 +34,11 @@ export async function getAttendee(app: FastifyInstance) {
         )},
       }, 
     }, async (request, reply) => {
-      const { code } = request.params
+      const { id } = request.params
 
       const attendee = await prisma.attendee.findUnique({
         where: {
-          code,
+          id,
         },
 
         select: {
