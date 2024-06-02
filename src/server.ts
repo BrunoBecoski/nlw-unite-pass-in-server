@@ -16,6 +16,7 @@ import { getEvents } from './routes/get-events'
 import { createAttendee } from './routes/attendee/create-attendee'
 import { getAttendee } from './routes/attendee/get-attendee'
 import { updateAttendee } from './routes/attendee/update-attendee'
+import { updateAttendeeCode } from './routes/attendee/update-attendee-code'
 import { deleteAttendee } from './routes/attendee/delete-attendee'
 import { getAttendees } from './routes/attendee/get-attendees'
 
@@ -56,6 +57,7 @@ app.register(createEvent)
 app.register(createAttendee)
 app.register(getAttendee)
 app.register(updateAttendee)
+app.register(updateAttendeeCode)
 app.register(deleteAttendee)
 app.register(getAttendees)
 

@@ -57,6 +57,12 @@ Content-Type: application/json
 
 ###
 
+# Update an attendee code
+
+GET HTTP://localhost:3333/update/attendee/code/92c14a5b-5387-48b1-866c-3c0de77c9072
+
+###
+
 # Delete an attendee
 DELETE http://localhost:3333/delete/attendee/b2269485-de4d-4b69-aa94-ec5acf6ee903
 ###
