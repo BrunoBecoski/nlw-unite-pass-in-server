@@ -23,6 +23,11 @@ GET http://localhost:3333/get/event/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0
 
 ###
 
+# Delete an attendee
+DELETE http://localhost:3333/delete/event/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0
+###
+
+
 # Get events
 GET http://localhost:3333/events
 

@@ -20,6 +20,7 @@ import { getAttendees } from './routes/attendee/get-attendees'
 
 import { createEvent } from './routes/event/create-event'
 import { getEvent } from './routes/event/get-event'
+import { deleteEvent } from './routes/event/delete-event'
 
 export const app = fastify()
 
@@ -53,6 +54,7 @@ app.register(getAttendeeBadge)
 
 app.register(createEvent)
 app.register(getEvent)
+app.register(deleteEvent)
 app.register(getEvents)
 
 app.register(createAttendee)
