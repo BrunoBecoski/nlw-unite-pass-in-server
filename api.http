@@ -9,9 +9,11 @@ POST http://localhost:3333/events
 Content-Type: application/json
 
 {
-  "title": 2,
+  "title": "Um evento",
   "details": "Um Novo evento 2 para quem é apaixonado por programação",
-  "maximumAttendees": 1
+  "maximumAttendees": 1,
+  "startDate": "2024-07-01",
+  "endDate": "2024-07-05"
 }
 
 ###

@@ -8,17 +8,14 @@ datasource db {
 }
 
 model Event {
-  id                String   @id @default(uuid())
-  title             String
-  details           String?
-  slug              String   @unique
-  maximumAttendees  Int?     @map("maximum_attendees")
-  startDate         DateTime @map("start_date")
-  endDate           DateTime @map("end_date")
-  virtualEvent      Boolean  @map("virtual_event")
-  physicalEvent     Boolean  @map("physical_event")
-  checkInAfterStart Boolean  @map("check_in_after_start")
-  createdAt         DateTime @default(now()) @map("created_at")
+  id               String   @id @default(uuid())
+  slug             String   @unique
+  title            String
+  details          String
+  maximumAttendees Int      @map("maximum_attendees")
+  startDate        DateTime @map("start_date")
+  endDate          DateTime @map("end_date")
+  createdAt        DateTime @default(now()) @map("created_at")
 
   attendees EventAttendee[]
 
@@ -29,12 +26,11 @@ model Attendee {
   id        String   @id @default(uuid())
   code      String   @unique()
   name      String
-  email     String
+  email     String   @unique()
   createdAt DateTime @default(now()) @map("created_at")
 
   events EventAttendee[]
 
-  @@unique([email])
   @@map("attendees")
 }
 

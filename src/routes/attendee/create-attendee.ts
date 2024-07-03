@@ -22,7 +22,9 @@ export async function createAttendee(app: FastifyInstance) {
             attendee: z.object({
               id: z.string().uuid(),
               code: z.string(),
-            }),
+              name: z.string(),
+              email: z.string().email(),
+            })
           }),
         },
       },
@@ -51,6 +53,8 @@ export async function createAttendee(app: FastifyInstance) {
         select: {
           id: true,
           code: true,
+          name: true,
+          email: true,
         }
       })
 
@@ -58,6 +62,8 @@ export async function createAttendee(app: FastifyInstance) {
         attendee: {
           id: attendee.id,
           code: attendee.code,
+          name: attendee.name,
+          email: attendee.email,
         }
       })
     })
