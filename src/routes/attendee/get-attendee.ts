@@ -10,7 +10,7 @@ export async function getAttendee(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .get('/get/attendee/:id', {
       schema: {
-        summary: 'Get attendee',
+        summary: 'Get an attendee',
         tags: ['get', 'attendee'],
         params: z.object({
           id: z.string().uuid(),
@@ -52,13 +52,13 @@ export async function getAttendee(app: FastifyInstance) {
               event: {
                 select: {
                   id: true,
-                  title: true,
                   slug: true,
-                }
-              }
-            }
-          }
-        }
+                  title: true,
+                },
+              },
+            },
+          },
+        },
       })
 
       if (attendee == null) {

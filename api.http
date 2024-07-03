@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 
 # Get an event
-GET http://localhost:3333/events/e8b1762c-8bef-4808-850f-cd768c7c57c1
+GET http://localhost:3333/get/event/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0
 
 ###
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 ###
 
 # Get an attendee
-GET http://localhost:3333/get/attendee/92c14a5b-5387-48b1-866c-3c0de77c9072
+GET http://localhost:3333/get/attendee/b8d15ef3-d90f-4c7a-b393-4bec8fbf2681
 ###
 
 # Update an attendee

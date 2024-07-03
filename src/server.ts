@@ -5,7 +5,6 @@ import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 
 import { registerForEvent } from './routes/register-for-event'
-import { getEvent } from './routes/get-event'
 import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { checkIn } from './routes/check-in'
 import { getEventAttendees } from './routes/get-event-attendees'
@@ -20,6 +19,7 @@ import { deleteAttendee } from './routes/attendee/delete-attendee'
 import { getAttendees } from './routes/attendee/get-attendees'
 
 import { createEvent } from './routes/event/create-event'
+import { getEvent } from './routes/event/get-event'
 
 export const app = fastify()
 
@@ -51,9 +51,9 @@ app.register(checkIn)
 app.register(registerForEvent)
 app.register(getAttendeeBadge)
 
+app.register(createEvent)
 app.register(getEvent)
 app.register(getEvents)
-app.register(createEvent)
 
 app.register(createAttendee)
 app.register(getAttendee)
