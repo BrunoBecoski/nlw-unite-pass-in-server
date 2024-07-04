@@ -2,18 +2,19 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { generateSlug } from '../../utils/generate-slug'
 import { prisma } from '../../lib/prisma'
-import { BadRequest } from './../_errors/bad-request'
+import { BadRequest } from '../_errors/bad-request'
+import { generateSlug } from '../../utils/generate-slug'
 
-export async function createEvent(app: FastifyInstance) {
+export async function updateEvent(app: FastifyInstance) {
   app
-    .withTypeProvider<ZodTypeProvider>() 
-    .post('/events', {
+    .withTypeProvider<ZodTypeProvider>()
+    .put('/update/event', {
       schema: {
-        summary: 'Create an event',
-        tags: ['create', 'event'],
+        summary: 'Update an Event',
+        tags: ['update', 'event'],
         body: z.object({
+          id: z.string().uuid(),
           title: z.string().min(4),
           details: z.string(),
           maximumAttendees: z.number().int().positive(),
@@ -21,8 +22,8 @@ export async function createEvent(app: FastifyInstance) {
           endDate: z.string().min(10),
         }),
         response: {
-          201: z.object({
-            event: z.object({
+          200: z.object({  
+            updatedEvent: z.object({
               id: z.string().uuid(),
               slug: z.string(),
               title: z.string(),
@@ -35,16 +36,19 @@ export async function createEvent(app: FastifyInstance) {
         },
       },
     }, async (request, reply) => {
-    
-      const { 
-        title,
-        details,
-        maximumAttendees,
-        startDate,
-        endDate,
-      } = request.body
+      const { id, title, details, maximumAttendees, startDate, endDate } = request.body
 
-      const slug = generateSlug(title)  
+      const event = await prisma.event.findUnique({
+        where: {
+          id,
+        },
+      })
+
+      if (event == null) {
+        throw new BadRequest('Event not found.')
+      }
+      
+      const slug = generateSlug(title)
 
       const eventWithSameSlug = await prisma.event.findUnique({
         where: {
@@ -52,46 +56,40 @@ export async function createEvent(app: FastifyInstance) {
         }
       })
 
-      if (eventWithSameSlug !== null) {
-        throw new BadRequest('Another event with same title already exists.')
+      if (eventWithSameSlug != null && eventWithSameSlug.id != id) {
+        throw new BadRequest('Another event with same slug already exists.')
       }
 
       const startDateFormatted = new Date(startDate)
       const endDateFormatted = new Date(endDate)
-
+      
       if (isNaN(startDateFormatted.getTime())) {
         throw new BadRequest('Start date is invalid')
       }
-
+      
       if (isNaN(endDateFormatted.getTime())) {
         throw new BadRequest('End date is invalid')
       }
-
+      
       if (startDateFormatted > endDateFormatted) {
         throw new BadRequest('End date is before start date')
       }
 
-      const event = await prisma.event.create({
+      const updatedEvent = await prisma.event.update({
+        where: {
+          id,
+        },
+
         data: {
           slug,
           title,
           details,
+          maximumAttendees,
           startDate: startDateFormatted,
           endDate: endDateFormatted,
-          maximumAttendees,
-        }
+        },
       })
-      
-      return reply.status(201).send({
-        event: {
-          id: event.id,
-          title: event.title,
-          details: event.details,
-          slug: event.slug,
-          maximumAttendees: event.maximumAttendees,
-          startDate: event.startDate,
-          endDate: event.endDate,
-        }
-      })
+
+      return reply.status(200).send({ updatedEvent })
     })
 }

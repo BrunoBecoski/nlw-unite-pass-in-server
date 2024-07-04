@@ -19,11 +19,26 @@ Content-Type: application/json
 ###
 
 # Get an event
-GET http://localhost:3333/get/event/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0
+GET http://localhost:3333/get/event/753affcf-1e3a-491f-81b2-36254343fd93
 
 ###
 
-# Delete an attendee
+# Update an event
+PUT http://localhost:3333/update/event
+Content-Type: application/json
+
+{
+  "id": "ecf4ed8c-d4b7-4e38-8ff7-a9bb3e802867",
+  "title": "Um Novo Evento",
+  "details": "Um Novo Novo evento 2 para quem é apaixonado por programação",
+  "maximumAttendees": 1,
+  "startDate": "2024-07-01",
+  "endDate": "2024-07-05"
+}
+
+###
+
+# Delete an event
 DELETE http://localhost:3333/delete/event/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0
 ###
 
@@ -49,7 +64,7 @@ Content-Type: application/json
 ###
 
 # Get an attendee
-GET http://localhost:3333/get/attendee/b8d15ef3-d90f-4c7a-b393-4bec8fbf2681
+GET http://localhost:3333/get/attendee/b43c5d60-fdaf-4c74-a0f0-72f73a1ba81b
 ###
 
 # Update an attendee
@@ -57,9 +72,9 @@ PUT http://localhost:3333/update/attendee
 Content-Type: application/json
 
 {
-  "id": "92c14a5b-5387-48b1-866c-3c0de77c9072",
-  "name": "Bruno Becoski",
-  "email": "bruno@email.com"
+  "id": "b43c5d60-fdaf-4c74-a0f0-72f73a1ba81b",
+  "name": "Bruno Alves",
+  "email": "bruno@mail.com"
 }
 
 ###

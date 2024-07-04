@@ -46,8 +46,8 @@ export async function updateAttendee(app: FastifyInstance) {
           email,
         }
       })
-
-      if (attendeeWithSameEmail != null) {
+      
+      if (attendeeWithSameEmail != null && attendeeWithSameEmail.id != id) {
         throw new BadRequest('Another attendee with same email already exists.')
       }
 
