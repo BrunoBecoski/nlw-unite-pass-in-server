@@ -22,6 +22,7 @@ import { deleteEvent } from './routes/event/delete-event'
 import { getEvents } from './routes/event/get-events'
 
 import { registerEventAttendee } from './routes/eventAttendee/resgiter-eventAttendee'
+import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
 
 export const app = fastify()
 
@@ -50,9 +51,7 @@ app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
 app.register(checkIn)
-app.register(registerForEvent)
 app.register(getAttendeeBadge)
-
 
 app.register(createAttendee)
 app.register(getAttendee)
@@ -68,8 +67,7 @@ app.register(deleteEvent)
 app.register(getEvents)
 
 app.register(registerEventAttendee)
-
-app.register(getEventAttendees)
+app.register(deleteEventAttendee)
 
 app.setErrorHandler(errorHandler)
 

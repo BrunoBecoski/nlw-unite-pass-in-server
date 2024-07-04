@@ -5,13 +5,13 @@ import { z } from 'zod'
 import { prisma } from '../../lib/prisma'
 import { BadRequest } from '../_errors/bad-request'
 
-export async function registerEventAttendee(app: FastifyInstance) {
+export async function deleteEventAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/register/event/:eventId/attendee/:attendeeId', {
+    .delete('/delete/event/:eventId/attendee/:attendeeId', {
       schema: {
-        summary: 'Register an event attendee',
-        tags: ['register', 'event', 'attendee'],
+        summary: 'Delete an event attendee',
+        tags: ['delete', 'event', 'attendee'],
         params: z.object({
           attendeeId: z.string().uuid(),
           eventId: z.string().uuid(),
@@ -53,15 +53,16 @@ export async function registerEventAttendee(app: FastifyInstance) {
         }
       })
 
-      if (existingEventAttendee != null) {
-        throw new BadRequest('EventAttendee already register')
+      if (existingEventAttendee == null) {
+        throw new BadRequest('EventAttendee not found.')
       }
 
-      await prisma.eventAttendee.create({
-        data: {
-          eventId,
-          attendeeId,
-          checkIn: false,
+      await prisma.eventAttendee.delete({
+        where: {
+          eventId_attendeeId: {
+            eventId,
+            attendeeId,
+          }
         }
       })
 
