@@ -9,7 +9,6 @@ import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { checkIn } from './routes/check-in'
 import { getEventAttendees } from './routes/get-event-attendees'
 import { errorHandler } from './error-handler'
-import { getEvents } from './routes/get-events'
 
 import { createAttendee } from './routes/attendee/create-attendee'
 import { getAttendee } from './routes/attendee/get-attendee'
@@ -22,6 +21,7 @@ import { createEvent } from './routes/event/create-event'
 import { getEvent } from './routes/event/get-event'
 import { updateEvent } from './routes/event/update-event'
 import { deleteEvent } from './routes/event/delete-event'
+import { getEvents } from './routes/event/get-events'
 
 export const app = fastify()
 

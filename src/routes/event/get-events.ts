@@ -2,15 +2,15 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { prisma } from '../lib/prisma'
+import { prisma } from '../../lib/prisma'
 
 export async function getEvents(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/events', {
+    .get('/get/events', {
       schema: {
-        summary: 'Get events',
-        tags: ['events'],
+        summary: 'Get Events',
+        tags: ['get', 'events'],
         querystring: z.object({
           pageIndex: z.string().nullish().default('1').transform(Number),
           query: z.string().nullish(),
@@ -23,13 +23,10 @@ export async function getEvents(app: FastifyInstance) {
                 slug: z.string(),
                 title: z.string(),
                 details: z.string().nullable(),
-                attendees: z.number(),
                 maximumAttendees: z.number().nullable(),
                 startDate: z.date(),
                 endDate: z.date(),
-                virtualEvent: z.boolean(),
-                physicalEvent: z.boolean(),
-                checkInAfterStart: z.boolean(),
+                attendees: z.number(),
               }),
             ),
             total: z.number(),
@@ -49,46 +46,28 @@ export async function getEvents(app: FastifyInstance) {
             maximumAttendees: true,
             startDate: true,
             endDate: true,
-            virtualEvent: true,
-            physicalEvent: true,
-            checkInAfterStart: true,
             _count: {
               select: {
                 attendees: true,
-              }
-            }
+              },
+            },
           },
           where: query ? {
-            OR: [
-              {
-                title: {
-                  contains: query,
-                }
-              },
-              { 
-                details: {
-                  contains: query,
-                },
-              }
-            ]            
+            title: {
+              contains: query,
+            },
           } : {},
           take: 10,
           skip: (pageIndex - 1) * 10,
+          orderBy: {
+            createdAt: 'desc'
+          }
         }),
         prisma.event.count({
           where: query ? {
-            OR: [
-              {
-                title: {
-                  contains: query,
-                }
-              },
-              { 
-                details: {
-                  contains: query,
-                },
-              }
-            ]    
+            title: {
+              contains: query,
+            },  
           } : {},
         }),
       ])
@@ -100,13 +79,10 @@ export async function getEvents(app: FastifyInstance) {
             title: event.title,
             slug: event.slug,
             details: event.details,
-            attendees: event._count.attendees,
             maximumAttendees: event.maximumAttendees,
             startDate: event.startDate,
             endDate: event.endDate,
-            virtualEvent: event.virtualEvent,
-            physicalEvent: event.physicalEvent,
-            checkInAfterStart: event.checkInAfterStart,
+            attendees: event._count.attendees,
           }
         }) ,
         total,

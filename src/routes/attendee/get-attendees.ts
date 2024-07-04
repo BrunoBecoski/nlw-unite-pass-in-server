@@ -10,7 +10,7 @@ export async function getAttendees(app: FastifyInstance) {
     .get('/get/attendees',{
       schema: {
         summary: 'Get Attendees',
-        tags: ['attendees'],
+        tags: ['get', 'attendees'],
         querystring: z.object({
           pageIndex: z.string().nullish().default('1').transform(Number),
           query: z.string().nullish(),
@@ -43,20 +43,19 @@ export async function getAttendees(app: FastifyInstance) {
             _count: {
               select: {
                 events: true,
-              }
-            }
+              },
+            },
           },
           where: query ? {
             name: {
               contains: query,
             } 
-          } : {
-          },
-            take: 10,
-            skip: (pageIndex - 1) * 10,
-            orderBy: {
-              createdAt: 'desc'
-            },        
+          } : {},
+          take: 10,
+          skip: (pageIndex - 1) * 10,
+          orderBy: {
+            createdAt: 'desc'
+          },        
         }),
         prisma.attendee.count({
           where: query ? {
