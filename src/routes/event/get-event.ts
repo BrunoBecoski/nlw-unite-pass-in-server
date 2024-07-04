@@ -23,6 +23,8 @@ export async function getEvent(app: FastifyInstance) {
               slug: z.string(),
               details: z.string().nullable(),
               maximumAttendees: z.number().int().nullable(),
+              startDate: z.date(),
+              endDate: z.date(),
               attendees: z.array(
                 z.object({
                   id: z.string().uuid(),
@@ -84,6 +86,8 @@ export async function getEvent(app: FastifyInstance) {
           slug: event.slug,
           details: event.details,
           maximumAttendees: event.maximumAttendees,
+          startDate: event.startDate,
+          endDate: event.endDate,
           attendees,
         }
       })

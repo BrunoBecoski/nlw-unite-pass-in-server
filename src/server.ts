@@ -4,10 +4,8 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fast
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 
-import { registerForEvent } from './routes/register-for-event'
 import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { checkIn } from './routes/check-in'
-import { getEventAttendees } from './routes/get-event-attendees'
 import { errorHandler } from './error-handler'
 
 import { createAttendee } from './routes/attendee/create-attendee'
@@ -22,6 +20,8 @@ import { getEvent } from './routes/event/get-event'
 import { updateEvent } from './routes/event/update-event'
 import { deleteEvent } from './routes/event/delete-event'
 import { getEvents } from './routes/event/get-events'
+
+import { registerEventAttendee } from './routes/eventAttendee/resgiter-eventAttendee'
 
 export const app = fastify()
 
@@ -66,6 +66,8 @@ app.register(getEvent)
 app.register(updateEvent)
 app.register(deleteEvent)
 app.register(getEvents)
+
+app.register(registerEventAttendee)
 
 app.register(getEventAttendees)
 

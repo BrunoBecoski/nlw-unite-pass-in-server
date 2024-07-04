@@ -94,6 +94,13 @@ GET http://localhost:3333/get/attendees
 
 ###
 
+# EVENTATTENDEE
+
+###
+
+# Register eventAttendee
+GET http://localhost:3333/register/event/0a0904b1-c079-4319-898c-655610190bb9/attendee/06cb52d2-fc07-4ff5-bb07-27b9742172d4
+
 # Get an attendee badge
 GET http://localhost:3333/attendees/5/badge
 
