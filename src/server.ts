@@ -22,6 +22,7 @@ import { deleteEvent } from './routes/event/delete-event'
 import { getEvents } from './routes/event/get-events'
 
 import { registerEventAttendee } from './routes/eventAttendee/resgiter-eventAttendee'
+import { checkInEventAttendee } from './routes/eventAttendee/check-in-eventAttendee'
 import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
 
 export const app = fastify()
@@ -67,6 +68,7 @@ app.register(deleteEvent)
 app.register(getEvents)
 
 app.register(registerEventAttendee)
+app.register(checkInEventAttendee)
 app.register(deleteEventAttendee)
 
 app.setErrorHandler(errorHandler)

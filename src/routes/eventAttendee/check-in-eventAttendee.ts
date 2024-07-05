@@ -5,13 +5,13 @@ import { z } from 'zod'
 import { prisma } from '../../lib/prisma'
 import { BadRequest } from '../_errors/bad-request'
 
-export async function registerEventAttendee(app: FastifyInstance) {
+export async function checkInEventAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/register/event/:eventId/attendee/:attendeeId', {
+    .get('/check-in/event/:eventId/attendee/:attendeeId', {
       schema: {
-        summary: 'Register an event attendee',
-        tags: ['register', 'event', 'attendee'],
+        summary: 'Check in an event attendee',
+        tags: ['check-in', 'event', 'attendee'],
         params: z.object({
           attendeeId: z.string().uuid(),
           eventId: z.string().uuid(),
@@ -29,27 +29,13 @@ export async function registerEventAttendee(app: FastifyInstance) {
         },
 
         select: {
-          id: true,
-          startDate:true,
-          maximumAttendees: true,
-          _count: {
-            select: {
-              attendees: true,
-            }
-          }
+          startDate: true,
+          endDate: true,
         }
       })
 
       if (event == null) {
         throw new BadRequest('Event not found.')
-      }
-
-      if (event.startDate <= new Date()) {
-        throw new BadRequest('Event already start.')
-      }
-
-      if (event.maximumAttendees <= event._count.attendees) {
-        throw new BadRequest('The maximum number of attendees for this event has been reached.')
       }
 
       const attendee = await prisma.attendee.findUnique({
@@ -71,15 +57,29 @@ export async function registerEventAttendee(app: FastifyInstance) {
         }
       })
 
-      if (existingEventAttendee != null) {
-        throw new BadRequest('EventAttendee already register')
+      if (existingEventAttendee == null) {
+        throw new BadRequest('Attendee not register in event.')
       }
 
-      await prisma.eventAttendee.create({
+      if (event.startDate >= new Date()) {
+        throw new BadRequest('Event is not start.')
+      }
+
+      if (event.endDate <= new Date()) {
+        throw new BadRequest('Event is end.')
+      }
+
+
+
+      await prisma.eventAttendee.update({
+        where: {
+          eventId_attendeeId: {
+            eventId,
+            attendeeId,
+          }
+        },
         data: {
-          eventId,
-          attendeeId,
-          checkIn: false,
+          checkIn: true
         }
       })
 

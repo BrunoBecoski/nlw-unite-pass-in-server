@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 
 # Get an event
-GET http://localhost:3333/get/event/753affcf-1e3a-491f-81b2-36254343fd93
+GET http://localhost:3333/get/event/9ea4cc6a-6807-4795-ae5b-17df3a413e28
 
 ###
 
@@ -99,12 +99,18 @@ GET http://localhost:3333/get/attendees
 ###
 
 # Register eventAttendee
-GET http://localhost:3333/register/event/0a0904b1-c079-4319-898c-655610190bb9/attendee/06cb52d2-fc07-4ff5-bb07-27b9742172d4
+GET http://localhost:3333/register/event/3cd8d81f-bb85-413e-8108-fd08f09dc665/attendee/09b36ca2-801f-4762-a13d-b431ac87bc59
 
 ###
 
+# Check-in eventAttendee
+GET http://localhost:3333/check-in/event/3cd8d81f-bb85-413e-8108-fd08f09dc665/attendee/09b36ca2-801f-4762-a13d-b431ac87bc59
+
+###
+
+
 # Delete eventAttendee
-DELETE http://localhost:3333/delete/event/0a0904b1-c079-4319-898c-655610190bb9/attendee/06cb52d2-fc07-4ff5-bb07-27b9742172d4
+DELETE http://localhost:3333/delete/event/ecf4ed8c-d4b7-4e38-8ff7-a9bb3e802867/attendee/26db9c58-8f20-453e-8c24-454e66ff79f9
 
 ###
 
