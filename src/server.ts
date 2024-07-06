@@ -5,7 +5,6 @@ import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 
 import { getAttendeeBadge } from './routes/get-attendee-badge'
-import { checkIn } from './routes/check-in'
 import { errorHandler } from './error-handler'
 
 import { createAttendee } from './routes/attendee/create-attendee'
@@ -21,9 +20,11 @@ import { updateEvent } from './routes/event/update-event'
 import { deleteEvent } from './routes/event/delete-event'
 import { getEvents } from './routes/event/get-events'
 
-import { registerEventAttendee } from './routes/eventAttendee/resgiter-eventAttendee'
+import { registerEventAttendee } from './routes/eventAttendee/register-eventAttendee'
 import { checkInEventAttendee } from './routes/eventAttendee/check-in-eventAttendee'
 import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
+import { getAttendeeEvents } from './routes/eventAttendee/get-attendeeEvents'
+import { getEventAttendees } from './routes/eventAttendee/get-eventAttendees'
 
 export const app = fastify()
 
@@ -51,7 +52,6 @@ app.register(fastifySwaggerUI, {
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
-app.register(checkIn)
 app.register(getAttendeeBadge)
 
 app.register(createAttendee)
@@ -70,6 +70,8 @@ app.register(getEvents)
 app.register(registerEventAttendee)
 app.register(checkInEventAttendee)
 app.register(deleteEventAttendee)
+app.register(getAttendeeEvents)
+app.register(getEventAttendees)
 
 app.setErrorHandler(errorHandler)
 

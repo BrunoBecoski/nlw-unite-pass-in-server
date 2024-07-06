@@ -2,18 +2,18 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
-import { prisma } from '../lib/prisma'
-import { BadRequest } from './_errors/bad-request'
+import { prisma } from '../../lib/prisma'
+import { BadRequest } from '../_errors/bad-request'
 
 export async function getEventAttendees(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/events/:slug/attendees', {
+    .get('/get/event/:id/attendees',{
       schema: {
-        summary: 'Get event attendee',
-        tags: ['events'],
+        summary: 'Get Event Attendees',
+        tags: ['get', 'event', 'attendees'],
         params: z.object({
-          slug: z.string(),
+          id: z.string().uuid()
         }),
         querystring: z.object({
           pageIndex: z.string().nullish().default('1').transform(Number),
@@ -23,86 +23,95 @@ export async function getEventAttendees(app: FastifyInstance) {
           200: z.object({
             attendees: z.array(
               z.object({
-                id: z.number(),
+                id: z.string().uuid(),
+                code: z.string(),
                 name: z.string(),
                 email: z.string().email(),
-                createdAt: z.date(),
-                checkedInAt: z.date().nullable(),
+                events: z.number(),
               }),
             ),
-            eventTitle: z.string(),
-            total: z.number(),
-
+            total: z.number(),       
           }),
         },
       },
     }, async (request, reply) => {
-      const { slug } = request.params
+      const { id } = request.params
       const { pageIndex, query } = request.query
-      
+
       const event = await prisma.event.findUnique({
-        select: {
-          id: true,
-          title: true,
-        },
         where: {
-          slug,
+          id,
         }
       })
 
-      if (event === null) {
+      if (event == null) {
         throw new BadRequest('Event not found.')
       }
 
+      console.log('pageIndex: ', pageIndex)
+      console.log('query: ', query)
+
       const [attendees, total] = await Promise.all([
         prisma.attendee.findMany({
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            createdAt: true,
-            checkIn: {
-              select: {
-                createdAt: true,
-              },
-            },
-          },
           where: query ? {
-            eventId: event.id,
             name: {
               contains: query,
+            },
+            events: {
+              some: {
+                eventId: id,
+              }
             }
           } : {
+            events: {
+              some: {
+                eventId: id,
+              }
+            }
+          },
+          include: {
+            _count: {
+              select: {
+                events: true
+              },
+            },
           },
           take: 10,
           skip: (pageIndex - 1) * 10,
           orderBy: {
             createdAt: 'desc'
-          }
+          },    
         }),
         prisma.attendee.count({
           where: query ? {
-            eventId: event.id,
             name: {
               contains: query,
+            },
+            events: {
+              some: {
+                eventId: id,
+              }
             }
           } : {
-            eventId: event.id,
+            events: {
+              some: {
+                eventId: id
+              }
+            }
           }
         })
-      ])      
+      ])
 
       return reply.status(200).send({
         attendees: attendees.map(attendee => {
           return {
             id: attendee.id,
+            code: attendee.code,
             name: attendee.name,
             email: attendee.email,
-            createdAt: attendee.createdAt, 
-            checkedInAt: attendee.checkIn?.createdAt ?? null,
+            events: attendee._count.events,
           }
         }),
-        eventTitle: event.title,
         total,
       })
     })

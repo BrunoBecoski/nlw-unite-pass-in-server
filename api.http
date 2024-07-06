@@ -99,7 +99,7 @@ GET http://localhost:3333/get/attendees
 ###
 
 # Register eventAttendee
-GET http://localhost:3333/register/event/3cd8d81f-bb85-413e-8108-fd08f09dc665/attendee/09b36ca2-801f-4762-a13d-b431ac87bc59
+GET http://localhost:3333/register/event/7cd6baef-8228-4290-8ac8-f71839bbb714/attendee/0c390130-aa04-4176-8294-853f57e12858
 
 ###
 
@@ -124,7 +124,12 @@ GET http://localhost:3333/attendees/5/check-in
 
 ###
 
-# Get event attendee
-GET http://localhost:3333/events/cb9108f2-8d99-4d30-bfa1-bb6e3bb41da0/attendees?pageIndex=2
+# Get attendee events
+GET HTTP://localhost:3333/get/attendee/abb3b6ac-62c2-44b8-abee-58e3820dcff9/events?query=uni
 
+###
 
+# Get attendee events
+GET HTTP://localhost:3333/get/event/af3ad086-d004-475d-96f3-2cd1fd3f52f1/attendees?pageIndex=2
+
+###
