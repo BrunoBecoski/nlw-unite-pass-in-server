@@ -19,8 +19,7 @@ Content-Type: application/json
 ###
 
 # Get an event
-GET http://localhost:3333/get/event/9ea4cc6a-6807-4795-ae5b-17df3a413e28
-
+GET http://localhost:3333/get/event/unite-summit
 ###
 
 # Update an event
