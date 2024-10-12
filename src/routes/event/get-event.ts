@@ -23,6 +23,8 @@ export async function getEvent(app: FastifyInstance) {
               slug: z.string(),
               details: z.string().nullable(),
               maximumAttendees: z.number().int().nullable(),
+              totalAttendees: z.number().int().nullable(),
+              checkInAttendees: z.number().int().nullable(),
               startDate: z.date(),
               endDate: z.date(),
               attendees: z.array(
@@ -30,6 +32,8 @@ export async function getEvent(app: FastifyInstance) {
                   id: z.string().uuid(),
                   code: z.string(),
                   name: z.string(),
+                  email: z.string(),
+                  checkIn: z.boolean(),
                 })
               ),
             }),
@@ -52,18 +56,6 @@ export async function getEvent(app: FastifyInstance) {
           maximumAttendees: true,
           startDate: true,
           endDate: true,
-
-          attendees: {
-            select: {
-              attendee: {
-                select: {
-                  id: true,
-                  code: true,
-                  name: true,
-                },
-              },
-            },
-          },
         },
       })
 
@@ -71,14 +63,35 @@ export async function getEvent(app: FastifyInstance) {
         throw new BadRequest('Event not found.')
       }
 
-      const attendees = event.attendees.map(({ attendee }) => {
+      const eventAttendees = await prisma.eventAttendee.findMany({
+        where: { eventId: event.id },
+
+        select: {
+          checkIn: true,
+          attendee: {
+            select: {
+              id: true,
+              code: true,
+              name: true,
+              email: true,
+            }
+          }
+        }
+      })
+
+      const totalAttendees = eventAttendees.length
+      const checkInAttendees = eventAttendees.filter(({ checkIn }) => checkIn).length
+
+      const attendees = eventAttendees.map(({ checkIn, attendee }) => {
         return {
           id: attendee.id,
           code: attendee.code,
           name: attendee.name,
+          email: attendee.email,
+          checkIn,
         }
       })
-
+      
       return reply.status(200).send({ 
         event: {
           id: event.id,
@@ -86,6 +99,8 @@ export async function getEvent(app: FastifyInstance) {
           slug: event.slug,
           details: event.details,
           maximumAttendees: event.maximumAttendees,
+          totalAttendees,
+          checkInAttendees,
           startDate: event.startDate,
           endDate: event.endDate,
           attendees,
