@@ -8,12 +8,12 @@ import { BadRequest } from '../_errors/bad-request'
 export async function getAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/get/attendee/:id', {
+    .get('/get/attendee/:code', {
       schema: {
         summary: 'Get an attendee',
         tags: ['get', 'attendee'],
         params: z.object({
-          id: z.string().uuid(),
+          code: z.string(),
         }),
         response: {
           200: z.object({
@@ -27,6 +27,10 @@ export async function getAttendee(app: FastifyInstance) {
                   id: z.string().uuid(),
                   slug: z.string(),
                   title: z.string(),
+                  details: z.string(),
+                  startDate: z.date(),
+                  endDate: z.date(),
+                  checkIn: z.boolean(),
                 }),
               ),
             }),
@@ -34,11 +38,11 @@ export async function getAttendee(app: FastifyInstance) {
         )},
       }, 
     }, async (request, reply) => {
-      const { id } = request.params
+      const { code } = request.params
 
       const attendee = await prisma.attendee.findUnique({
         where: {
-          id,
+          code,
         },
 
         select: {
@@ -46,30 +50,41 @@ export async function getAttendee(app: FastifyInstance) {
           code: true,
           name: true,
           email: true,
-
-          events: {
-            select: {
-              event: {
-                select: {
-                  id: true,
-                  slug: true,
-                  title: true,
-                },
-              },
-            },
-          },
         },
       })
 
       if (attendee == null) {
         throw new BadRequest('Attendee not found.')
       }
+
+      const attendeeEvents = await prisma.eventAttendee.findMany({
+        where : { attendeeId: attendee.id },
+        
+        select: { 
+          checkIn: true,
+          event: {
+            select: {
+              id: true,
+              slug: true,
+              title: true,
+              details: true,
+              startDate: true,
+              endDate: true,
+            },
+          },
+        }
+
+      })
       
-      const events = attendee.events.map(({ event }) => {      
+      const events = attendeeEvents.map(({ checkIn, event }) => {      
         return {
           id: event.id,
           slug: event.slug,
           title: event.title,
+          details: event.details,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          checkIn,
         }
       })
 

@@ -63,7 +63,7 @@ Content-Type: application/json
 ###
 
 # Get an attendee
-GET http://localhost:3333/get/attendee/b43c5d60-fdaf-4c74-a0f0-72f73a1ba81b
+GET http://localhost:3333/get/attendee/00001
 ###
 
 # Update an attendee
