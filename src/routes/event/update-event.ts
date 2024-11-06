@@ -45,7 +45,7 @@ export async function updateEvent(app: FastifyInstance) {
       })
 
       if (event == null) {
-        throw new BadRequest('Event not found.')
+        throw new BadRequest('Evento não encontrado.')
       }
       
       const slug = generateSlug(title)
@@ -57,22 +57,22 @@ export async function updateEvent(app: FastifyInstance) {
       })
 
       if (eventWithSameSlug != null && eventWithSameSlug.id != id) {
-        throw new BadRequest('Another event with same slug already exists.')
+        throw new BadRequest('Nome utilizado.')
       }
 
       const startDateFormatted = new Date(startDate)
       const endDateFormatted = new Date(endDate)
       
       if (isNaN(startDateFormatted.getTime())) {
-        throw new BadRequest('Start date is invalid')
+        throw new BadRequest('Data de início inválida')
       }
       
       if (isNaN(endDateFormatted.getTime())) {
-        throw new BadRequest('End date is invalid')
+        throw new BadRequest('Data de fim inválida')
       }
       
       if (startDateFormatted > endDateFormatted) {
-        throw new BadRequest('End date is before start date')
+        throw new BadRequest('Data do fim está antes data de início.')
       }
 
       const updatedEvent = await prisma.event.update({

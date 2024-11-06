@@ -30,7 +30,7 @@ export async function deleteEventAttendee(app: FastifyInstance) {
       })
 
       if (event == null) {
-        throw new BadRequest('Event not found.')
+        throw new BadRequest('Evento não encontrado.')
       }
 
       const attendee = await prisma.attendee.findUnique({
@@ -40,7 +40,7 @@ export async function deleteEventAttendee(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       const existingEventAttendee = await prisma.eventAttendee.findUnique({
@@ -54,7 +54,7 @@ export async function deleteEventAttendee(app: FastifyInstance) {
       })
 
       if (existingEventAttendee == null) {
-        throw new BadRequest('EventAttendee not found.')
+        throw new BadRequest('Evento Participante não encontrado.')
       }
 
       await prisma.eventAttendee.delete({

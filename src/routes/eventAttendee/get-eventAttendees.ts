@@ -45,7 +45,7 @@ export async function getEventAttendees(app: FastifyInstance) {
       })
 
       if (event == null) {
-        throw new BadRequest('Event not found.')
+        throw new BadRequest('Evento não encontrado.')
       }
 
       const [attendees, total] = await Promise.all([

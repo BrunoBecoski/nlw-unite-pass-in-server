@@ -38,7 +38,7 @@ export async function updateAttendee(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       const attendeeWithSameEmail = await prisma.attendee.findUnique({
@@ -48,7 +48,7 @@ export async function updateAttendee(app: FastifyInstance) {
       })
       
       if (attendeeWithSameEmail != null && attendeeWithSameEmail.id != id) {
-        throw new BadRequest('Another attendee with same email already exists.')
+        throw new BadRequest('Email está sendo utilizado.')
       }
 
       const updatedAttendee = await prisma.attendee.update({

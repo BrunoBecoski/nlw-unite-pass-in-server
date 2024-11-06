@@ -29,7 +29,7 @@ export async function deleteEvent(app: FastifyInstance) {
       })
 
       if (event == null) {
-        throw new BadRequest('Event not found.')
+        throw new BadRequest('Evento não encontrado.')
       }
 
       await prisma.event.delete({

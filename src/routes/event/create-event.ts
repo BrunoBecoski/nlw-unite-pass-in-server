@@ -9,7 +9,7 @@ import { BadRequest } from './../_errors/bad-request'
 export async function createEvent(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>() 
-    .post('/events', {
+    .post('/create/event', {
       schema: {
         summary: 'Create an event',
         tags: ['create', 'event'],
@@ -17,8 +17,8 @@ export async function createEvent(app: FastifyInstance) {
           title: z.string().min(4),
           details: z.string(),
           maximumAttendees: z.number().int().positive(),
-          startDate: z.string().min(10),
-          endDate: z.string().min(10),
+          startDate: z.date(),
+          endDate: z.date(),
         }),
         response: {
           201: z.object({
@@ -53,22 +53,22 @@ export async function createEvent(app: FastifyInstance) {
       })
 
       if (eventWithSameSlug !== null) {
-        throw new BadRequest('Another event with same title already exists.')
+        throw new BadRequest('Nome utilizado.')
       }
 
       const startDateFormatted = new Date(startDate)
       const endDateFormatted = new Date(endDate)
 
       if (isNaN(startDateFormatted.getTime())) {
-        throw new BadRequest('Start date is invalid')
+        throw new BadRequest('Data de início invalida')
       }
 
       if (isNaN(endDateFormatted.getTime())) {
-        throw new BadRequest('End date is invalid')
+        throw new BadRequest('Data de fim inválida')
       }
 
       if (startDateFormatted > endDateFormatted) {
-        throw new BadRequest('End date is before start date')
+        throw new BadRequest('Data fim esta antes data de inicio.')
       }
 
       const event = await prisma.event.create({

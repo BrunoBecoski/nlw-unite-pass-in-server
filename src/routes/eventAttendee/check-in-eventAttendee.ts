@@ -35,7 +35,7 @@ export async function checkInEventAttendee(app: FastifyInstance) {
       })
 
       if (event == null) {
-        throw new BadRequest('Event not found.')
+        throw new BadRequest('Evento não encontrado.')
       }
 
       const attendee = await prisma.attendee.findUnique({
@@ -45,7 +45,7 @@ export async function checkInEventAttendee(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       const existingEventAttendee = await prisma.eventAttendee.findUnique({
@@ -58,15 +58,15 @@ export async function checkInEventAttendee(app: FastifyInstance) {
       })
 
       if (existingEventAttendee == null) {
-        throw new BadRequest('Attendee not register in event.')
+        throw new BadRequest('Participante não está registrado no evento.')
       }
 
       if (event.startDate >= new Date()) {
-        throw new BadRequest('Event is not start.')
+        throw new BadRequest('Evento não começou.')
       }
 
       if (event.endDate <= new Date()) {
-        throw new BadRequest('Event is end.')
+        throw new BadRequest('Evento terminou.')
       }
 
 

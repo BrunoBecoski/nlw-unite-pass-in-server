@@ -38,7 +38,7 @@ export async function createAttendee(app: FastifyInstance) {
       })
 
       if (attendeeWithSameEmail != null) {
-        throw new BadRequest('Another attendee with same email already exists.')
+        throw new BadRequest('Email está sendo utilizado.')
       }
 
       const code = await generateCode()

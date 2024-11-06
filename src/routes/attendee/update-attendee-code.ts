@@ -32,7 +32,7 @@ export async function updateAttendeeCode(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       const code = await prisma.attendee.update({

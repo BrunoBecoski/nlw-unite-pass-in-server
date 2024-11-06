@@ -54,7 +54,7 @@ export async function getAttendee(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       const attendeeEvents = await prisma.eventAttendee.findMany({

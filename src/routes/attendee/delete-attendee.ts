@@ -29,7 +29,7 @@ export async function deleteAttendee(app: FastifyInstance) {
       })
 
       if (attendee == null) {
-        throw new BadRequest('Attendee not found.')
+        throw new BadRequest('Participante não encontrado.')
       }
 
       await prisma.attendee.delete({
