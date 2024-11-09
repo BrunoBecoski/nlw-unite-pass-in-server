@@ -17,8 +17,8 @@ export async function createEvent(app: FastifyInstance) {
           title: z.string().min(4),
           details: z.string(),
           maximumAttendees: z.number().int().positive(),
-          startDate: z.date(),
-          endDate: z.date(),
+          startDate: z.coerce.date(),
+          endDate: z.coerce.date(),
         }),
         response: {
           201: z.object({
