@@ -26,7 +26,7 @@ export async function getAttendees(app: FastifyInstance) {
                 events: z.number(),
               }),
             ),
-            total: z.number(),       
+            total: z.number(),     
           }),
         },
       },

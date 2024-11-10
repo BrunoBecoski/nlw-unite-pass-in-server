@@ -15,6 +15,10 @@ export async function getEvent(app: FastifyInstance) {
         params: z.object({
           slug: z.string(),
         }),
+        querystring: z.object({
+          pageIndex: z.string().nullish().default('1').transform(Number),
+          query: z.string().nullish(),
+        }),
         response: {
           200: z.object({
             event: z.object({
@@ -36,18 +40,16 @@ export async function getEvent(app: FastifyInstance) {
                   checkIn: z.boolean(),
                 })
               ),
+            total: z.number(),
             }),
           },
         )},
       },
     }, async (request, reply) => {
       const { slug } = request.params
+      const { pageIndex, query } = request.query
       
       const event = await prisma.event.findUnique({
-        where: {
-          slug,
-        },
-
         select: {
           id: true,
           title: true,
@@ -57,27 +59,62 @@ export async function getEvent(app: FastifyInstance) {
           startDate: true,
           endDate: true,
         },
+
+        where: {
+          slug,
+        },
       })
 
       if (event === null) {
         throw new BadRequest('Evento não encontrado.')
       }
 
-      const eventAttendees = await prisma.eventAttendee.findMany({
-        where: { eventId: event.id },
-
-        select: {
-          checkIn: true,
-          attendee: {
-            select: {
-              id: true,
-              code: true,
-              name: true,
-              email: true,
+      const [eventAttendees, total] = await Promise.all([
+        prisma.eventAttendee.findMany({
+          select: {
+            checkIn: true,
+            attendee: {
+              select: {
+                id: true,
+                code: true,
+                name: true,
+                email: true,
+              }
             }
+          },
+          where: query ? {
+            eventId: event.id,
+            attendee: {
+              name: {
+                contains: query
+              },
+            },
+          } : { 
+            eventId: event.id,
+          },
+          take: 10,
+          skip: (pageIndex - 1) * 10,
+          orderBy: {
+            createdAt: 'desc'
           }
-        }
-      })
+        }),
+        prisma.eventAttendee.count({
+          where: query ? {
+            event: {
+              slug,
+            },
+            attendee: {
+              name: {
+                contains: query,
+              }
+            },
+          } : {
+            event: {
+              slug,
+            },
+          }
+        }),
+      ])
 
       const totalAttendees = eventAttendees.length
       const checkInAttendees = eventAttendees.filter(({ checkIn }) => checkIn).length
@@ -104,6 +141,7 @@ export async function getEvent(app: FastifyInstance) {
           startDate: event.startDate,
           endDate: event.endDate,
           attendees,
+          total,
         }
       })
     })
