@@ -8,24 +8,31 @@ import { BadRequest } from '../_errors/bad-request'
 export async function registerEventAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/register/event/:eventId/attendee/:attendeeId', {
+    .get('/register/event/:slug/attendee/:code', {
       schema: {
         summary: 'Register an event attendee',
         tags: ['register', 'event', 'attendee'],
         params: z.object({
-          attendeeId: z.string().uuid(),
-          eventId: z.string().uuid(),
+          slug: z.string(),
+          code: z.string(),
         }),
         response: {
-          204: z.null(),
+          200: z.object({
+            eventAttendee: z.object({
+              eventId: z.string().uuid(),
+              attendeeId: z.string().uuid(),
+              checkIn: z.boolean(),
+              createdAt: z.date(),
+            }),
+          }),
         },
       },
     }, async (request, reply) => {
-      const { eventId, attendeeId } = request.params
+      const { slug, code } = request.params
 
       const event = await prisma.event.findUnique({
         where: {
-          id: eventId
+          slug: slug,
         },
 
         select: {
@@ -54,7 +61,7 @@ export async function registerEventAttendee(app: FastifyInstance) {
 
       const attendee = await prisma.attendee.findUnique({
         where: {
-          id: attendeeId,
+          code,
         }
       })
 
@@ -65,24 +72,24 @@ export async function registerEventAttendee(app: FastifyInstance) {
       const existingEventAttendee = await prisma.eventAttendee.findUnique({
         where: {
           eventId_attendeeId: {
-            eventId,
-            attendeeId,
+            eventId: event.id,
+            attendeeId: attendee.id,
           }
         }
       })
 
       if (existingEventAttendee != null) {
-        throw new BadRequest('Evento Participante registrado.')
+        throw new BadRequest('Participante já está registrado no evento.')
       }
 
-      await prisma.eventAttendee.create({
+      const eventAttendee = await prisma.eventAttendee.create({
         data: {
-          eventId,
-          attendeeId,
+          eventId: event.id,
+          attendeeId: attendee.id,
           checkIn: false,
         }
       })
 
-      return reply.status(204).send()
+      return reply.status(200).send({ eventAttendee })
     })
 }
