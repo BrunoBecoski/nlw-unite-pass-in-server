@@ -22,6 +22,8 @@ export async function deleteEvent(app: FastifyInstance) {
     }, async (request, reply) => {
       const { id } = request.params
 
+      console.log(id)
+
       const event = await prisma.event.findUnique({
         where: {
           id,
