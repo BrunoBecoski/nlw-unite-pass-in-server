@@ -5,13 +5,13 @@ import { z } from 'zod'
 import { prisma } from '../../lib/prisma'
 import { BadRequest } from '../_errors/bad-request'
 
-export async function registerEventAttendee(app: FastifyInstance) {
+export async function createEventAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/register/event/:slug/attendee/:code', {
+    .get('/create/event/:slug/attendee/:code', {
       schema: {
-        summary: 'Register an event attendee',
-        tags: ['register', 'event', 'attendee'],
+        summary: 'Create an event attendee',
+        tags: ['create', 'event', 'attendee'],
         params: z.object({
           slug: z.string(),
           code: z.string(),

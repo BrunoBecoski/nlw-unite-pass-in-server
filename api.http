@@ -97,8 +97,8 @@ GET http://localhost:3333/get/attendees
 
 ###
 
-# Register eventAttendee
-GET http://localhost:3333/register/event/7cd6baef-8228-4290-8ac8-f71839bbb714/attendee/0c390130-aa04-4176-8294-853f57e12858
+# Create eventAttendee
+GET http://localhost:3333/create/event/7cd6baef-8228-4290-8ac8-f71839bbb714/attendee/0c390130-aa04-4176-8294-853f57e12858
 
 ###
 

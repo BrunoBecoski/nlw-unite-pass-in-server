@@ -20,7 +20,7 @@ import { updateEvent } from './routes/event/update-event'
 import { deleteEvent } from './routes/event/delete-event'
 import { getEvents } from './routes/event/get-events'
 
-import { registerEventAttendee } from './routes/eventAttendee/register-eventAttendee'
+import { createEventAttendee } from './routes/eventAttendee/create-eventAttendee'
 import { checkInEventAttendee } from './routes/eventAttendee/check-in-eventAttendee'
 import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
 import { getAttendeeEvents } from './routes/eventAttendee/get-attendeeEvents'
@@ -67,7 +67,7 @@ app.register(updateEvent)
 app.register(deleteEvent)
 app.register(getEvents)
 
-app.register(registerEventAttendee)
+app.register(createEventAttendee)
 app.register(checkInEventAttendee)
 app.register(deleteEventAttendee)
 app.register(getAttendeeEvents)
