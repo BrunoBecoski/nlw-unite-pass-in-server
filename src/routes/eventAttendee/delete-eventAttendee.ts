@@ -8,24 +8,24 @@ import { BadRequest } from '../_errors/bad-request'
 export async function deleteEventAttendee(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .delete('/delete/event/:eventId/attendee/:attendeeId', {
+    .delete('/delete/event/:slug/attendee/:code', {
       schema: {
         summary: 'Delete an event attendee',
         tags: ['delete', 'event', 'attendee'],
         params: z.object({
-          attendeeId: z.string().uuid(),
-          eventId: z.string().uuid(),
+          slug: z.string(),
+          code: z.string(),
         }),
         response: {
           204: z.null(),
         },
       },
     }, async (request, reply) => {
-      const { eventId, attendeeId } = request.params
+      const { slug, code } = request.params
 
       const event = await prisma.event.findUnique({
         where: {
-          id: eventId
+          slug,
         }
       })
 
@@ -35,7 +35,7 @@ export async function deleteEventAttendee(app: FastifyInstance) {
 
       const attendee = await prisma.attendee.findUnique({
         where: {
-          id: attendeeId,
+          code,
         }
       })
 
@@ -46,8 +46,8 @@ export async function deleteEventAttendee(app: FastifyInstance) {
       const existingEventAttendee = await prisma.eventAttendee.findUnique({
         where: {
           eventId_attendeeId: {
-            eventId,
-            attendeeId,
+            eventId: event.id,
+            attendeeId: attendee.id,
           }
 
         }
@@ -60,12 +60,12 @@ export async function deleteEventAttendee(app: FastifyInstance) {
       await prisma.eventAttendee.delete({
         where: {
           eventId_attendeeId: {
-            eventId,
-            attendeeId,
+            eventId: event.id,
+            attendeeId: attendee.id,
           }
         }
       })
 
-      return reply.status(204).send()
+      return reply.status(204)
     })
 }
