@@ -17,7 +17,14 @@ export async function checkInEventAttendee(app: FastifyInstance) {
           eventId: z.string().uuid(),
         }),
         response: {
-          204: z.null(),
+          200: z.object({
+            eventAttendee: z.object({
+              eventId: z.string().uuid(),
+              attendeeId: z.string().uuid(),
+              checkIn: z.boolean(),
+              createdAt: z.date(),
+            }),
+          }),
         },
       },
     }, async (request, reply) => {
@@ -69,9 +76,7 @@ export async function checkInEventAttendee(app: FastifyInstance) {
         throw new BadRequest('Evento terminou.')
       }
 
-
-
-      await prisma.eventAttendee.update({
+      const eventAttendee = await prisma.eventAttendee.update({
         where: {
           eventId_attendeeId: {
             eventId,
@@ -83,6 +88,6 @@ export async function checkInEventAttendee(app: FastifyInstance) {
         }
       })
 
-      return reply.status(204).send()
+      return reply.status(200).send({ eventAttendee })
     })
 }
