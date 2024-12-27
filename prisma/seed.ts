@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker'
 import { Prisma } from '@prisma/client'
-import dayjs from 'dayjs'
 
 import { prisma } from '../src/lib/prisma'
 
@@ -9,14 +8,49 @@ async function seed() {
   await prisma.attendee.deleteMany()
   await prisma.eventAttendee.deleteMany()
 
+  const eventsToInsert: Prisma.EventCreateManyInput[] = []
+
+  for (let i = 1; i <= 15; i++) {
+    eventsToInsert.push({
+      title: faker.lorem.sentence({ min: 1, max: 3 }),
+      slug: faker.lorem.slug(),
+      maximumAttendees: faker.number.int({ min: 1, max: 100 }),
+      details: faker.lorem.sentence(),
+      startDate: faker.date.recent({ days: 10 }),
+      endDate: faker.date.soon({ days: 10 })
+    })
+  }
+
+  await Promise.all(
+    eventsToInsert.map(data => {
+      return prisma.event.create({ data })
+    })
+  )
+  
+  const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
+  
+  for (let i = 1; i <= 15; i++) {
+    attendeesToInsert.push({
+      name: faker.person.fullName(),
+      email: faker.internet.email().toLocaleLowerCase(),
+      code: faker.number.int({ min: 10000, max: 99999 }).toString()
+    })
+  }
+      
+  await Promise.all(
+    attendeesToInsert.map(data => {
+      return prisma.attendee.create({ data })
+    })
+  )
+
   const event = await prisma.event.create({
     data: {
       title: 'Unite Summit',
       slug: 'unite-summit',
       details: 'Um evento p/ DEVs apaixonados(as) por código!',
       maximumAttendees: 125,
-      startDate: new Date("07-01-2024 "),
-      endDate: new Date("07-07-2024"),
+      startDate: new Date('07-01-2024'),
+      endDate: new Date('07-07-2024'),
     }
   })
 
@@ -36,8 +70,7 @@ async function seed() {
     }
   })
 
-
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i <= 5; i++) {
     const forAttendee = await prisma.attendee.create({
       data: {
         name: faker.person.fullName(),
@@ -55,12 +88,12 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i <= 5; i++) {
     const forEvent = await prisma.event.create({
       data: {
         title: faker.lorem.sentence({ min: 1, max: 3 }),
         slug: faker.lorem.slug(),
-        maximumAttendees: faker.number.int({ min: 1, max: 1000 }),
+        maximumAttendees: faker.number.int({ min: 1, max: 100 }),
         details: faker.lorem.sentence(),
         startDate: faker.date.recent({ days: 10 }),
         endDate: faker.date.soon({ days: 10 })
@@ -75,41 +108,6 @@ async function seed() {
       }
     })
   }
-
-  const eventsToInsert: Prisma.EventCreateManyInput[] = []
-
-  for (let i = 1; i <= 25; i++) {
-    eventsToInsert.push({
-      title: faker.lorem.sentence({ min: 1, max: 3 }),
-      slug: faker.lorem.slug(),
-      maximumAttendees: faker.number.int({ min: 1, max: 1000 }),
-      details: faker.lorem.sentence(),
-      startDate: faker.date.recent({ days: 10 }),
-      endDate: faker.date.soon({ days: 10 })
-    })
-  }
-
-  const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
-  
-  for (let i = 1; i <= 50; i++) {
-    attendeesToInsert.push({
-      name: faker.person.fullName(),
-      email: faker.internet.email().toLocaleLowerCase(),
-      code: faker.number.int({ min: 10000, max: 99999 }).toString()
-    })
-  }
-      
-  await Promise.all(
-    attendeesToInsert.map(data => {
-      return prisma.attendee.create({ data })
-    })
-  )
-  
-  await Promise.all(
-    eventsToInsert.map(data => {
-      return prisma.event.create({ data })
-    })
-  )
 }
 
 seed().then(() => {
