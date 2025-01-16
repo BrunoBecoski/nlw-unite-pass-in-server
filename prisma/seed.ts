@@ -16,8 +16,8 @@ async function seed() {
       slug: faker.lorem.slug(),
       maximumAttendees: faker.number.int({ min: 1, max: 100 }),
       details: faker.lorem.sentence(),
-      startDate: faker.date.recent({ days: 10 }),
-      endDate: faker.date.soon({ days: 10 })
+      startDate: faker.date.soon({ days: 10 }),
+      endDate: faker.date.soon({ days: 30 })
     })
   }
 
