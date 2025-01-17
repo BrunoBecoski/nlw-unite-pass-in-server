@@ -9,6 +9,7 @@ import { errorHandler } from './error-handler'
 
 import { createAttendee } from './routes/attendee/create-attendee'
 import { getAttendee } from './routes/attendee/get-attendee'
+import { getAttendeeEvents } from './routes/attendee/get-attendee-events'
 import { updateAttendee } from './routes/attendee/update-attendee'
 import { updateAttendeeCode } from './routes/attendee/update-attendee-code'
 import { deleteAttendee } from './routes/attendee/delete-attendee'
@@ -23,7 +24,7 @@ import { getEvents } from './routes/event/get-events'
 import { createEventAttendee } from './routes/eventAttendee/create-eventAttendee'
 import { checkInEventAttendee } from './routes/eventAttendee/check-in-eventAttendee'
 import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
-import { getAttendeeEvents } from './routes/eventAttendee/get-attendeeEvents'
+// import { getAttendeeEvents } from './routes/eventAttendee/get-attendeeEvents'
 import { getEventAttendees } from './routes/eventAttendee/get-eventAttendees'
 
 export const app = fastify()
@@ -56,6 +57,7 @@ app.register(getAttendeeBadge)
 
 app.register(createAttendee)
 app.register(getAttendee)
+app.register(getAttendeeEvents)
 app.register(updateAttendee)
 app.register(updateAttendeeCode)
 app.register(deleteAttendee)
@@ -70,7 +72,7 @@ app.register(getEvents)
 app.register(createEventAttendee)
 app.register(checkInEventAttendee)
 app.register(deleteEventAttendee)
-app.register(getAttendeeEvents)
+// app.register(getAttendeeEvents)
 app.register(getEventAttendees)
 
 app.setErrorHandler(errorHandler)

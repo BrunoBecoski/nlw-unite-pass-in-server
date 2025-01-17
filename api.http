@@ -66,6 +66,10 @@ Content-Type: application/json
 GET http://localhost:3333/get/attendee/00001
 ###
 
+# Get an attendee events
+GET http://localhost:3333/get/attendee/00001/events
+###
+
 # Update an attendee
 PUT http://localhost:3333/update/attendee
 Content-Type: application/json
