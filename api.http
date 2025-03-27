@@ -19,8 +19,13 @@ Content-Type: application/json
 ###
 
 # Get an event
-GET http://localhost:3333/get/event/unite-summit?pageIndex=2
+GET http://localhost:3333/get/event/unite-summit
 ###
+
+# Get an event attendee
+GET http://localhost:3333/get/event/unite-summit/attendees
+###
+
 
 # Update an event
 PUT http://localhost:3333/update/event

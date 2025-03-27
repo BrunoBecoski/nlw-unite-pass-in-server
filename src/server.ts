@@ -4,28 +4,26 @@ import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fast
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 
-import { getAttendeeBadge } from './routes/get-attendee-badge'
 import { errorHandler } from './error-handler'
 
 import { createAttendee } from './routes/attendee/create-attendee'
 import { getAttendee } from './routes/attendee/get-attendee'
+import { getAttendees } from './routes/attendee/get-attendees'
 import { getAttendeeEvents } from './routes/attendee/get-attendee-events'
 import { updateAttendee } from './routes/attendee/update-attendee'
 import { updateAttendeeCode } from './routes/attendee/update-attendee-code'
 import { deleteAttendee } from './routes/attendee/delete-attendee'
-import { getAttendees } from './routes/attendee/get-attendees'
 
 import { createEvent } from './routes/event/create-event'
 import { getEvent } from './routes/event/get-event'
+import { getEvents } from './routes/event/get-events'
+import { getEventAttendees } from './routes/event/get-event-attendees'
 import { updateEvent } from './routes/event/update-event'
 import { deleteEvent } from './routes/event/delete-event'
-import { getEvents } from './routes/event/get-events'
 
 import { createEventAttendee } from './routes/eventAttendee/create-eventAttendee'
 import { checkInEventAttendee } from './routes/eventAttendee/check-in-eventAttendee'
 import { deleteEventAttendee } from './routes/eventAttendee/delete-eventAttendee'
-// import { getAttendeeEvents } from './routes/eventAttendee/get-attendeeEvents'
-import { getEventAttendees } from './routes/eventAttendee/get-eventAttendees'
 
 export const app = fastify()
 
@@ -53,8 +51,6 @@ app.register(fastifySwaggerUI, {
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
-app.register(getAttendeeBadge)
-
 app.register(createAttendee)
 app.register(getAttendee)
 app.register(getAttendeeEvents)
@@ -65,15 +61,14 @@ app.register(getAttendees)
 
 app.register(createEvent)
 app.register(getEvent)
+app.register(getEvents)
+app.register(getEventAttendees)
 app.register(updateEvent)
 app.register(deleteEvent)
-app.register(getEvents)
 
 app.register(createEventAttendee)
 app.register(checkInEventAttendee)
 app.register(deleteEventAttendee)
-// app.register(getAttendeeEvents)
-app.register(getEventAttendees)
 
 app.setErrorHandler(errorHandler)
 

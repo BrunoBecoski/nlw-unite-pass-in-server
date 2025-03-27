@@ -10,7 +10,7 @@ async function seed() {
 
   const eventsToInsert: Prisma.EventCreateManyInput[] = []
 
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 14; i++) {
     eventsToInsert.push({
       title: faker.lorem.sentence({ min: 1, max: 3 }),
       slug: faker.lorem.slug(),
@@ -29,7 +29,7 @@ async function seed() {
   
   const attendeesToInsert: Prisma.AttendeeUncheckedCreateInput[] = []
   
-  for (let i = 1; i <= 15; i++) {
+  for (let i = 1; i <= 14; i++) {
     attendeesToInsert.push({
       name: faker.person.fullName(),
       email: faker.internet.email().toLocaleLowerCase(),
@@ -70,7 +70,7 @@ async function seed() {
     }
   })
 
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= 14; i++) {
     const forAttendee = await prisma.attendee.create({
       data: {
         name: faker.person.fullName(),
@@ -88,7 +88,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= 14; i++) {
     const forEvent = await prisma.event.create({
       data: {
         title: faker.lorem.sentence({ min: 1, max: 3 }),

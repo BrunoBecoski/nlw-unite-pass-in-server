@@ -15,6 +15,10 @@ export async function getAttendeeEvents(app: FastifyInstance) {
         params: z.object({
           code: z.string(),
         }),
+        querystring: z.object({
+          pageIndex: z.string().nullish().default('1').transform(Number),
+          query: z.string().nullish(),
+        }),
         response: {
           200: z.object({
             events: z.array(
@@ -22,17 +26,19 @@ export async function getAttendeeEvents(app: FastifyInstance) {
                 id: z.string().uuid(),
                 slug: z.string(),
                 title: z.string(),
-                details: z.string(),
                 startDate: z.date(),
                 endDate: z.date(),
                 checkIn: z.boolean(),
               }),
             ),
+            eventsTotal: z.number(),
+            checkInTotal: z.number(),
           }),
         },
       },
     }, async (request, reply) => {
       const { code } = request.params
+      const { pageIndex, query } = request.query
 
       const attendee = await prisma.attendee.findUnique({
         select: {
@@ -47,36 +53,65 @@ export async function getAttendeeEvents(app: FastifyInstance) {
         throw new BadRequest('Participante não encontrado.')
       }
 
-      const eventsResponse = await prisma.eventAttendee.findMany({
-        select: {
-          checkIn: true,
-          event: {
-            select: {
-              id: true,
-              slug: true,
-              title: true,
-              details: true,
-              startDate: true,
-              endDate: true,
+      const [eventsResponse, eventsTotal, checkInTotal] = await Promise.all([
+        prisma.eventAttendee.findMany({
+          select: {
+            checkIn: true,
+            event: {
+              select: {
+                id: true,
+                slug: true,
+                title: true,
+                startDate: true,
+                endDate: true,
+              }
+            }
+          },
+          where: query ? {
+            attendeeId: attendee.id,
+            event: {
+              title: {
+                contains: query,
+              }
+            }
+          } : {
+            attendeeId: attendee.id,
+          },
+          take: 10,
+          skip: (pageIndex - 1) * 10,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }),
+        prisma.eventAttendee.count({
+          where: {
+            attendee: {
+              code,
+            },
+          }
+        }),
+        prisma.eventAttendee.count({
+          where: {
+            checkIn: true,
+            attendee: {
+              code,
             }
           }
-        },
-        where: {
-          attendeeId: attendee.id,
-        }
-      });
-      
-      const events = eventsResponse.map(event => ({
-        checkIn: event.checkIn,
-        id: event.event.id,
-        slug: event.event.slug,
-        title: event.event.title,
-        details: event.event.details,
-        startDate: event.event.startDate,
-        endDate: event.event.endDate,
-      }));
-        
+        })
 
-      return reply.status(200).send({ events })
+      ])
+      
+      const events = eventsResponse.map(({ checkIn, event }) => ({
+        checkIn: checkIn,
+        id: event.id,
+        slug: event.slug,
+        title: event.title,
+        startDate: event.startDate,
+        endDate: event.endDate,
+      }));
+
+      return reply.status(200).send({
+        events, eventsTotal, checkInTotal
+      })
     })
 }
