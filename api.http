@@ -118,7 +118,7 @@ GET http://localhost:3333/check-in/event/3cd8d81f-bb85-413e-8108-fd08f09dc665/at
 
 
 # Delete eventAttendee
-DELETE http://localhost:3333/delete/event/evento/attendee/00001
+DELETE http://localhost:3333/delete/event/unite-summit/attendee/00001
 
 ###
 

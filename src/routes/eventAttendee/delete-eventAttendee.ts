@@ -66,6 +66,6 @@ export async function deleteEventAttendee(app: FastifyInstance) {
         }
       })
 
-      return reply.status(204)
+      return reply.status(204).send()
     })
 }
