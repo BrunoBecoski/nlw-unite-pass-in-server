@@ -1,3 +1,11 @@
+<div align="center">
+  <a href="https://github.com/BrunoBecoski/nlw-unite-pass-in-web">Web</a> 
+  &nbsp; | &nbsp;
+  <a href="https://github.com/BrunoBecoski/nlw-unite-pass-in-server">Server</a>
+  &nbsp; | &nbsp;
+  <a href="https://github.com/BrunoBecoski/nlw-unite-pass-in-mobile">Mobile</a>
+</div>
+
 # pass.in
 
 O pass.in é uma aplicação de **gestão de participantes em eventos presenciais**. 
@@ -13,3 +21,4 @@ O sistema fará um scan da credencial do participante para permitir a entrada no
 - [TypeScript](https://www.typescriptlang.org)
 - [Fastify](https://fastify.dev)
 - [Prisma](https://www.prisma.io)
+- [SQLite](https://sqlite.org)
