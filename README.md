@@ -6,19 +6,18 @@
   <a href="https://github.com/BrunoBecoski/nlw-unite-pass-in-mobile">Mobile</a>
 </div>
 
-# pass.in
+<div align="center">
+  <h2>pass.in é uma aplicação de <i>gestão de participantes e eventos</i>.</h2>
+</div>
 
-O pass.in é uma aplicação de **gestão de participantes em eventos presenciais**. 
+<img src=".github/cover.png" alt="pass.in web" />
 
-A ferramenta permite que o organizador cadastre um evento e abra uma página pública de inscrição.
-
-Os participantes inscritos podem emitir uma credencial para check-in no dia do evento.
-
-O sistema fará um scan da credencial do participante para permitir a entrada no evento.
-
-## Tecnologias
+## Principais Tecnologias
 
 - [TypeScript](https://www.typescriptlang.org)
 - [Fastify](https://fastify.dev)
 - [Prisma](https://www.prisma.io)
 - [SQLite](https://sqlite.org)
+
+## Diagrama
+  <img src=".github/erd.png" alt="ERD" />
