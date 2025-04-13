@@ -14,6 +14,7 @@
 
 ## Principais Tecnologias
 
+- [Node.js](https://nodejs.org)
 - [TypeScript](https://www.typescriptlang.org)
 - [Fastify](https://fastify.dev)
 - [Prisma](https://www.prisma.io)
